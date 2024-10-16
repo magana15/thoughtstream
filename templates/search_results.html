@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Page{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">search results for "{{query}}"</h1>
+
+    <!-- Loop through the posts dynamically -->
+    {% for post in posts %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="date-author">Today {% if post.author != current_user %}<p class="card-text">| {{ post.author.username}}</p>
+
+            {% endif %}</p> <!-- Assuming author has a username attribute -->
+        <p class="card-text">{{ post.body[:150] }}...</p> <!-- Display a preview of the body text -->
+        <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-primary">Read More</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

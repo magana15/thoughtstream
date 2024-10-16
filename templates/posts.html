@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Blog Posts</h1>
+    
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-4 mb-4"> <!-- Use col-md-4 for three cards in a row -->
+            <div class="card h-100"> <!-- h-100 to ensure all cards are the same height -->
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="date-author">{{post.date_posted.strftime('%B %d, %Y')}} | {{ post.author.username }}</p>
+                    <p class="card-text">{{ post.body[:100] }}...</p>
+                    <a class="btn btn-primary" href="{{ url_for('post_detail', post_id=post.id) }}">Read more</a>
+                </div>
+                {% if post.author == current_user %}
+                <div class="card-footer d-flex justify-content-between">
+                    <form method="POST" action="/post/{{ post.id }}/delete">
+                        <button class="btn btn-danger" type="submit">Delete Post</button>
+                    </form>
+                    <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-secondary">Edit Post</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>+
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

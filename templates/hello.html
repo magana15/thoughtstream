@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Page{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">Blog</h1>
+
+    <!-- Loop through the posts dynamically -->
+    {% for post in posts %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="date-author">{{ post.date }} | By {{ post.author }}</p>
+        <p class="card-text">{{ post.body }}</p>
+        <a href="#" class="btn btn-primary">Read More</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

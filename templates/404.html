@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f8ff; /* Light background color */
+            color: #333; /* Dark text color */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            text-align: center;
+        }
+        h1 {
+            font-size: 100px;
+            font-weight: bold;
+            color: #ff6347; /* Tomato color for the heading */
+        }
+        p {
+            font-size: 20px;
+            margin: 20px 0;
+            color: #555; /* Slightly lighter text for the paragraph */
+        }
+        .btn-custom {
+            background-color: #28a745; /* Green background for the button */
+            color: white; /* White text for the button */
+            padding: 10px 20px; /* Padding for the button */
+            font-size: 18px; /* Font size for the button */
+        }
+        .btn-custom:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+    </style>
+    <title>404 Not Found</title>
+</head>
+<body>
+    <h1>404</h1>
+    <p>Oops! The page you're looking for doesn't exist.</p>
+    <a href="{{ url_for('home') }}" class="btn btn-custom">Back to Homepage</a>
+    
+    <!-- Bootstrap JS and dependencies (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

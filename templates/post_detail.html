@@ -1,0 +1,39 @@
+{%extends 'base.html'%}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{{ post.title }}</h1>
+    <p class="lead">{{ post.body }}</p> <!-- for prominent text -->
+
+    {% if post.author == current_user %}
+    <div class="mt-4">
+        <form method="POST" action="/post/{{ post.id }}/delete" class="d-inline">
+            <button class="btn btn-danger" type="submit">Delete Post</button>
+        </form>
+        <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-secondary">Edit Post</a>
+    </div>
+    {% endif %}
+</div>
+<!-- Like Button -->
+<form method="POST" action="{{ url_for('like_post', post_id=post.id) }}">
+    <button type="submit" class="btn btn-primary">Like ({{ post.likes|length }})</button>
+</form>
+
+<hr>
+<!-- Display existing comments -->  <h4>Comments ({{ post.comments|length }})</h4>
+{% for comment in post.comments %}
+    <div class="comment">
+    <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+    <small>{{ comment.date_posted.strftime('%B %d, %Y') }}</small>
+<hr>
+    </div>
+{% endfor %}
+
+<!-- Comment Form -->
+<form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
+    <div class="form-group">
+    <textarea name="content" class="form-control" placeholder="Add a comment..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-secondary">Submit</button>
+</form>
+</div>
+{% endblock %}
