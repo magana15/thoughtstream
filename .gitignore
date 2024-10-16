@@ -1,0 +1,58 @@
+
+Copy code
+# Python specific
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+
+# Environment variables
+.env
+
+# Byte-compiled and log files
+*.log
+*.sqlite3
+
+# Flask and database migration files
+migrations/
+instance/
+
+# Static file caches
+*.sass-cache
+*.cache
+
+# VSCode and other IDE settings
+.vscode/
+.idea/
+
+# Redis dump files
+dump.rdb
+
+# Python bytecode
+*.pyc
+
+# OS-specific files (Mac, Linux, Windows)
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.out
+
+# Requirements file
+!requirements.txt
+
+# Database
+*.db
+*.sqlite
+*.sql
