@@ -2,15 +2,13 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    background-color: #93d675;
+    font-weight: bold;
 }
 
 .navbar {
-    background-color: #333;
-    color: white;
+    background-color: rgba(69, 204, 103, 0.3);
     padding: 10px 0;
-    display: flex;
-    justify-content: space-between;
 }
 
 .navbar .container {
@@ -50,14 +48,15 @@ body {
 }
 
 .container {
-    width: 90%;
+    width: 98%;
     margin: 20px auto;
+    
 }
 
 footer {
     text-align: center;
     padding: 10px 0;
-    background-color: #333;
+    background-color: #ce6363;
     color: white;
     position: absolute;
     bottom: 0;
@@ -67,19 +66,41 @@ footer {
 .card {
     margin-bottom: 20px;
 }
+
 .card-title {
     font-size: 1.5rem;
     font-weight: bold;
 }
+
 .card-text {
     font-size: 1rem;
-}
-.date-author {
-    font-size: 0.9rem;
-    color: #6c757d;
 }
 
 .date-author {
     font-size: 0.9rem;
     color: rgb(196, 38, 38);
+}
+
+/* Profile Photo */
+.profile-photo {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    margin-left: 10px;
+    border: 2px solid #fff;
+    transition: transform 0.3s ease;
+}
+
+.profile-photo:hover {
+    transform: scale(1.1);
+}
+
+/* Navbar brand styling */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    margin-right: 8px;
 }

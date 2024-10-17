@@ -34,9 +34,13 @@ def init_routes(app, db, bcrypt):
             username = request.form.get('username')
             email = request.form.get('email')
             password = request.form.get('password')
+            confirm_password = request.form.get('confirm password')
 
             if not username or not email or not password :
                 return "all fields are required",400
+            #confirm that passwords match
+            if password != confirm_password:
+                return "passwords do not match", 400
 
 
 
