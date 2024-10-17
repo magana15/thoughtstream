@@ -2,19 +2,9 @@
 Copy code
 # Python specific
 __pycache__/
-*.py[cod]
-*.egg
-*.egg-info/
-*.pyo
-*.pyd
-*.pdb
-
 # Virtual environment
 venv/
-ENV/
-env/
-.venv/
-.ENV/
+
 
 # Environment variables
 .env
