@@ -4,8 +4,9 @@ from app import bcrypt, db
 from sqlalchemy.exc import IntegrityError
 from models import User,Post, Comment, Like
 
-def init_routes(app, db, bcrypt):
+def init_routes(app, db, bcrypt, cache):
     @app.route('/')
+    @cache.cached(timeout=60)
     def hello():
         if current_user.is_authenticated:
             user = str(current_user.email)
@@ -90,7 +91,7 @@ def init_routes(app, db, bcrypt):
                 return redirect(url_for('home'))
             else:
                 flash('Login unsuccessful. Check email and password.', 'danger')
-        flash('Login unsuccessful. Check email and password.', 'danger')
+        flash('Please login to continue', 'info')
         return render_template('login.html')
 
     # Route for user logout
@@ -101,7 +102,6 @@ def init_routes(app, db, bcrypt):
 
     # Home page (requires login)
     @app.route("/home")
-    #@login_required
     def home():
         return render_template('home.html')
 
@@ -129,13 +129,15 @@ def init_routes(app, db, bcrypt):
 #reading posts
     @app.route('/posts')
     def posts():
-        all_posts = Post.query.all()
+        page = request.args.get('page', 1, type=int)
+        all_posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=1)
         if all_posts:
             return render_template('posts.html', posts=all_posts)
         return render_template('404.html'), 404
 # Viewing a single post
     @app.route('/post/<int:post_id>')
     def post_detail(post_id):
+        page = request.args.get('page', 1, type=int)
         post = Post.query.get_or_404(post_id)
         return render_template('post_detail.html', post=post)
 #editing a post
@@ -239,13 +241,13 @@ def init_routes(app, db, bcrypt):
         # Unlike if the post is already liked
             db.session.delete(like)
             db.session.commit()
-            flash('You unliked the post.')
+            flash('You unliked the post.', 'info')
         else:
             # Add a new like
             like = Like(user_id=current_user.id, post_id=post_id)
             db.session.add(like)
             db.session.commit()
-            flash('You liked the post.')
+            flash('You liked the post.','primary')
 
         return redirect(url_for('post_detail', post_id=post.id))
 

@@ -11,10 +11,10 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">{{ post.title }}</h5>
-        <p class="date-author">Today {% if post.author != current_user %}<p class="card-text">| {{ post.author.username}}</p>
+        <p class="date-author">{{post.date_posted.strftime('%B %d, %y')}} {% if post.author != current_user %} | {{ post.author.username}}</p>
 
-            {% endif %}</p> <!-- Assuming author has a username attribute -->
-        <p class="card-text">{{ post.body[:150] }}...</p> <!-- Display a preview of the body text -->
+            {% endif %}</p> 
+        <p class="card-text">{{ post.body[:150] }}...</p> 
         <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-primary">Read More</a>
       </div>
     </div>
