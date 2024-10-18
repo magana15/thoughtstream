@@ -241,13 +241,13 @@ def init_routes(app, db, bcrypt, cache):
         # Unlike if the post is already liked
             db.session.delete(like)
             db.session.commit()
-            flash('You unliked the post.', 'info')
+            flash('You unliked the post.')
         else:
             # Add a new like
             like = Like(user_id=current_user.id, post_id=post_id)
             db.session.add(like)
             db.session.commit()
-            flash('You liked the post.','primary')
+            flash('You liked the post.')
 
         return redirect(url_for('post_detail', post_id=post.id))
 
