@@ -14,14 +14,29 @@
 
             <!-- User Posts Section -->
             <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="mb-4">Your Posts</h2>
-                    {% if user.posts %}
-                        {% include "posts.html" %}
-                    {% else %}
-                        <p class="text-muted">You have not created any posts yet.</p>
-                    {% endif %}
-                </div>
+    <div class="card-body">
+        <h2 class="mb-4">Your Posts</h2>
+
+        {% if user.posts %}
+            <ul class="list-unstyled">
+                {% for post in user.posts %}
+                    <li class="mb-3">
+                        <div class="post-item">
+                            <a href="{{ url_for('post_detail', post_id=post.id) }}" class="post-title h5 text-primary">
+                                {{ post.title }}
+                            </a>
+                            <p class="text-muted">
+                                {{ post.date_posted.strftime('%Y-%m-%d') }} by {{ post.author.username }}
+                            </p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">You have not created any posts yet.</p>
+        {% endif %}
+    </div>
+</div>
             </div>
         </div>
     </div>
