@@ -4,9 +4,13 @@
 
 {% block content %}
   <div class="container mt-4">
+    {%if posts%}
     <h1 class="mb-4">search results for "{{query}}"</h1>
-
+    {%else%}
+    <h1 class="mb-4">No search results for "{{query}}"</h1>
+    {%endif%}
     <!-- Loop through the posts dynamically -->
+    
     {% for post in posts %}
     <div class="card">
       <div class="card-body">
