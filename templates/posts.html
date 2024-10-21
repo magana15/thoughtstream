@@ -9,8 +9,12 @@
             <div class="card h-100"> 
                 <div class="card-body">
                     <h2 class="card-title">{{ post.title }}</h2>
+                    <img src="{{ current_user.profile_photo or url_for('static', filename='images/default_profile.jpg') }}" 
+             alt="{{ current_user.username }}'s Profile Photo" 
+             class="img-fluid rounded-circle mb-3" 
+             style="width: 40px; height: 40px; object-fit: cover;">
                     <p class="date-author">{{post.date_posted.strftime('%B %d, %Y')}} | {{ post.author.username }}</p>
-                    <p class="card-text">{{ post.body[:100] }}...</p>
+                    <p class="card-text">{{ post.body[:100] }}...|safe</p>
                     <a class="btn btn-primary" href="{{ url_for('post_detail', post_id=post.id) }}">Read more</a>
                 </div>
                 {% if post.author == current_user %}

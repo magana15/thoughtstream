@@ -1,9 +1,33 @@
+<head><link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+</head>
 <form method="POST" action="/post/new">
-    <label for="title">Title</label>
-    <input type="text" name="title" id="title" required>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" class="form-control" required>
+    </div>
     
-    <label for="body">Body</label>
-    <textarea name="body" id="body" required></textarea>
+    <div class="form-group">
+        <label for="body">Body</label>
+        <!-- Quill editor container -->
+        <div id="editor" style="height: 200px; background-color: white;"></div>
+        
+        <!-- Hidden input to submit the editor's content -->
+        <input type="hidden" name="body" id="body">
+    </div>
     
-    <button type="submit">Create Post</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+<script >
+    // Initialize Quill editor
+    var quill = new Quill('#editor', {
+      theme: 'snow'
+    });
+  
+    // On form submit, set the value of the hidden input to the content of the editor
+    var form = document.querySelector('form');
+    form.onsubmit = function() {
+      var body = document.querySelector('input[name=body]');
+      body.value = quill.root.innerHTML;
+    };
+  </script>
