@@ -132,7 +132,7 @@ def init_routes(app, db, bcrypt, cache):
             body = request.form['body']
             if not title or not body:
                 flash('Title and content are required.', 'error')
-                return redirect(url_for('create_post'))
+                return redirect(url_for('new_post'))
             
             allowed_tags = ['p', 'strong', 'em', 'blockquote', 'ul', 'ol', 'li', 'a', 'br']
             clean_body = bleach.clean(body, tags=allowed_tags, strip=True)
@@ -186,6 +186,8 @@ def init_routes(app, db, bcrypt, cache):
         # Check if the current user is the author of the post
         if post.author != current_user:
             abort(403)
+
+        Comment.query.filter_by(post_id=post.id).delete()
 
         db.session.delete(post)
         db.session.commit()
