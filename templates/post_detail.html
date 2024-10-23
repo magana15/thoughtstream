@@ -1,11 +1,22 @@
 {%extends 'base.html'%}
 {% block content %}
 <div class="container mt-4">
+    <!-- Post Title -->
     <h1 class="mb-4">{{ post.title }}</h1>
-    <div class="post-body">
-        {{ post.body | safe }}  <!-- Ensure the content is rendered as HTML -->
-    </div> <!-- for prominent text -->
 
+    <!-- Post Image -->
+    {% if post.image_url %}
+    <img src="{{ post.image_url }}" alt="Post Image" class="img-fluid mb-4" style="max-height: 400px; object-fit: cover;">
+    {% else %}
+    <img src="{{ url_for('static', filename='images/default_blog_image.jpg') }}" alt="Default Image" class="img-fluid mb-4" style="max-height: 400px; object-fit: cover;">
+    {% endif %}
+
+    <!-- Post Body (Formatted as HTML) -->
+    <div class="post-body mb-4" style="font-size: 1.2rem; line-height: 1.8;">
+        {{ post.body | safe }}  <!-- Ensure the content is rendered as HTML -->
+    </div>
+
+    <!-- Edit and Delete Buttons for the Author -->
     {% if post.author == current_user %}
     <div class="mt-4">
         <form method="POST" action="/post/{{ post.id }}/delete" class="d-inline">
@@ -14,28 +25,32 @@
         <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-secondary">Edit Post</a>
     </div>
     {% endif %}
-</div>
-<!-- Like Button -->
-<form method="POST" action="{{ url_for('like_post', post_id=post.id) }}">
-    <button type="submit" class="btn btn-primary">Like ({{ post.likes|length }})</button>
-</form>
 
-<hr>
-<!-- Display existing comments -->  <h4>Comments ({{ post.comments|length }})</h4>
-{% for comment in post.comments %}
-    <div class="comment">
-    <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
-    <small>{{ comment.date_posted.strftime('%B %d, %Y') }}</small>
-<hr>
-    </div>
-{% endfor %}
+    <!-- Like Button -->
+    <form method="POST" action="{{ url_for('like_post', post_id=post.id) }}" class="mt-4">
+        <button type="submit" class="btn btn-primary">Like ({{ post.likes|length }})</button>
+    </form>
 
-<!-- Comment Form -->
-<form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
-    <div class="form-group">
-    <textarea name="content" class="form-control" placeholder="Add a comment..." required></textarea>
+    <hr>
+
+    <!-- Comments Section -->
+    <h4>Comments ({{ post.comments|length }})</h4>
+
+    <!-- Existing Comments -->
+    {% for comment in post.comments %}
+    <div class="comment mb-3">
+        <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+        <small class="text-muted">{{ comment.date_posted.strftime('%B %d, %Y') }}</small>
+        <hr>
     </div>
-    <button type="submit" class="btn btn-secondary">Submit</button>
-</form>
+    {% endfor %}
+
+    <!-- Add New Comment Form -->
+    <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}" class="mt-4">
+        <div class="form-group">
+            <textarea name="content" class="form-control" rows="3" placeholder="Add a comment..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-secondary mt-2">Submit</button>
+    </form>
 </div>
 {% endblock %}

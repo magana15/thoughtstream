@@ -7,19 +7,35 @@
         {% for post in posts %}
         <div class="col-md-4 mb-4"> 
             <div class="card h-100"> 
+                <!-- Blog Image -->
+                <img src="{{ post.image_url or url_for('static', filename='images/default_blog_image.jpg') }}" 
+                     alt="{{ post.title }}" 
+                     class="card-img-top" 
+                     style="height: 200px; object-fit: cover;">  <!-- Adjust height and fit -->
+
                 <div class="card-body">
+                    <!-- Blog Title -->
                     <h2 class="card-title">{{ post.title }}</h2>
-                    <img src="{{ current_user.profile_photo or url_for('static', filename='images/default_profile.jpg') }}" 
-                          alt="{{ current_user.username }}'s Profile Photo" 
-                          class="img-fluid rounded-circle mb-3" 
-                          style="width: 40px; height: 40px; object-fit: cover;">
-                    <p class="date-author">{{post.date_posted.strftime('%B %d, %Y')}} | {{ post.author.username }}</p>
+
+                    <!-- Author Profile Image and Date -->
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ post.author.profile_photo or url_for('static', filename='images/default_profile.jpg') }}" 
+                             alt="{{ post.author.username }}'s Profile Photo" 
+                             class="img-fluid rounded-circle" 
+                             style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
+                        <p class="date-author mb-0">{{ post.date_posted.strftime('%B %d, %Y') }} | {{ post.author.username }}</p>
+                    </div>
+
+                    <!-- Blog Snippet (First 100 Characters) -->
                     <div class="post-body">
-                      {{ post.body[:100] | safe }}...  <!-- Ensure the content is rendered as HTML -->
-                  </div>
-                    <a class="btn btn-primary" href="{{ url_for('post_detail', post_id=post.id) }}">Read more</a>
+                        {{ post.body[:100] | safe }}...  <!-- Ensure content is rendered as HTML -->
+                    </div>
+
+                    <!-- Read More Button -->
+                    <a class="btn btn-primary mt-3" href="{{ url_for('post_detail', post_id=post.id) }}">Read more</a>
                 </div>
-                <!--Edit and Deleting post-->
+
+                <!-- Edit and Deleting Post -->
                 {% if post.author == current_user %}
                 <div class="card-footer d-flex justify-content-between">
                     <form method="POST" action="/post/{{ post.id }}/delete">
@@ -33,36 +49,37 @@
         {% endfor %}
     </div>
 </div>
-<!--Pagination-->
+
+<!-- Pagination -->
 <nav aria-label="Page navigation">
     <ul class="pagination">
-      {% if posts.has_prev %}
+        {% if posts.has_prev %}
         <li class="page-item">
-          <a class="page-link" href="{{ url_for('posts', page=posts.prev_num) }}" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
-          </a>
+            <a class="page-link" href="{{ url_for('posts', page=posts.prev_num) }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
         </li>
-      {% endif %}
-      
-      {% for page_num in posts.iter_pages() %}
-        {% if page_num %}
-          <li class="page-item {% if page_num == posts.page %}active{% endif %}">
-            <a class="page-link" href="{{ url_for('posts', page=page_num) }}">{{ page_num }}</a>
-          </li>
-        {% else %}
-          <li class="page-item"><span class="page-link">...</span></li>
         {% endif %}
-      {% endfor %}
-
-      {% if posts.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="{{ url_for('posts', page=posts.next_num) }}" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
-          </a>
+      
+        {% for page_num in posts.iter_pages() %}
+        {% if page_num %}
+        <li class="page-item {% if page_num == posts.page %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('posts', page=page_num) }}">{{ page_num }}</a>
         </li>
-      {% endif %}
+        {% else %}
+        <li class="page-item"><span class="page-link">...</span></li>
+        {% endif %}
+        {% endfor %}
+      
+        {% if posts.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('posts', page=posts.next_num) }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+        {% endif %}
     </ul>
-  </nav>
+</nav>
 {% endblock %}

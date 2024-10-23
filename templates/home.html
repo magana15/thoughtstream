@@ -1,23 +1,64 @@
 
-{% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
-
-{% block content %}
-<h1>Welcome to My Homepage</h1>
-    {% if current_user.is_authenticated%}
-        <p>Welcome <b>{{current_user.username}}</b> to my homepage!</p>
-    {%else%}
-        <h2>Hello!!</h2>
-    {%endif%}
-
-    <a href= "{{url_for('login')}}">login</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThoughtStream - Welcome</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #00c6ff 10%, #0072ff 100%);
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+    }
+    .btn-custom {
+      background-color: #f39c12;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+      border-radius: 50px;
+    }
+    .btn-custom:hover {
+      background-color: #e67e22;
+    }
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-section"><a href= "{{url_for('login')}}">login</a>
     <a href= "{{url_for('register')}}">register</a>
     <a href= "{{url_for('kijana')}}">kijana</a>
     <a href= "{{url_for('home')}}">home</a>
     <a href= "{{url_for('new_post')}}">new_post</a>
     <a href= "{{url_for('posts')}}">posts</a>
     <a href= "{{url_for('logout')}}">logout</a>
+    <h1>Welcome to ThoughtStream</h1>
+    <p>Explore ideas, insights, and stories from around the world. Dive deep into blogs curated just for you.</p>
+    <a href="/posts" class="btn btn-custom">Read More</a>
+  </div>
+</body>
+</html>
     
-{%endblock%}
+    
+
 
