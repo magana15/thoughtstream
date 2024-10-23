@@ -2,8 +2,6 @@
 
 {% block content %}
 <form method="POST" action="{{ url_for('edit_profile') }}" enctype="multipart/form-data" class="shadow-sm p-4 border rounded">
-    
-
     <!-- Profile Photo Upload -->
     <div class="text-center mb-4">
         <img src="{{ user.profile_photo or url_for('static', filename='images/default_profile.jpg') }}" 

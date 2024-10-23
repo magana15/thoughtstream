@@ -7,7 +7,7 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body text-center">
                     <h1 class="mb-3">{{ user.username }}'s Profile</h1>
-                    <img src="{{ user.profile_photo or url_for('static', filename='images/default_profile.jpg') }}" 
+                    <img src="{{'user.profile_photo' or url_for('static', filename='images/default_profile.jpg') }}" 
              alt="{{ user.username }}'s Profile Photo" 
              class="img-fluid rounded-circle mb-3" 
              style="width: 120px; height: 120px; object-fit: cover;">

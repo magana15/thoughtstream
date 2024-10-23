@@ -8,6 +8,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(100), unique = True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
+    profile_photo = db.Column(db.String(255), nullable=True, default='default_profile.jpg')
     
 
     def __repr__(self):
@@ -21,6 +22,7 @@ class Post(db.Model):
     title = db.Column(db.String(150), nullable=False)
     body = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
+    blog_image = db.Column(db.String(255), nullable=False)
     
     # Foreign Key to link the Post with the User
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

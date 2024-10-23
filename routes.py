@@ -40,13 +40,26 @@ def init_routes(app, db, bcrypt, cache):
         # based on the user's authentication status.
         if current_user.is_authenticated:
             return redirect(url_for('home'))
+        
         if request.method == 'POST':
+            profile_photo = None
+
+            if 'profile_photo' in request.files:
+                photo = request.files['profile_photo']
+                if photo and allowed_file(photo.filename):
+                    filename = secure_filename(photo.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                
+                    # Save the profile photo to the specified folder
+                    photo.save(filepath)
+                    
+                    user.profile_photo = filename
             username = request.form.get('username')
             email = request.form.get('email')
             password = request.form.get('password')
-            confirm_password = request.form.get('confirm password')
+            confirm_password = request.form.get('confirm_password')
 
-            if not username or not email or not password :
+            if not username or not email or not password:
                 return "all fields are required",400
             #confirm that passwords match
             if password != confirm_password:
@@ -59,7 +72,7 @@ def init_routes(app, db, bcrypt, cache):
 
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-            user = User(username=username,email=email,password=hashed_password)
+            user = User(username=username,email=email,password=hashed_password,profile_photo=profile_photo)
             try:
                 db.session.add(user)
                 db.session.commit()
@@ -128,17 +141,30 @@ def init_routes(app, db, bcrypt, cache):
     @login_required
     def new_post():
         if request.method == 'POST':
+            post = Post.post_id
+            if 'blog_image' in request.files:
+                blog_image = request.files['blog_image']
+                if blog_image and allowed_file(blog_image.filename):
+                    filename = secure_filename(blog_image.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                
+                    # Save the profile photo to the specified folder
+                    blog_image.save(filepath)
+                
+                    # Update the user's profile photo in the database
+                    post.blog_image = filename
             title = request.form['title']
             body = request.form['body']
-            if not title or not body:
-                flash('Title and content are required.', 'error')
+            
+            if not title or not body or not blog_image:
+                flash('Title, Image and content are required.', 'error')
                 return redirect(url_for('new_post'))
             
             allowed_tags = ['p', 'strong', 'em', 'blockquote', 'ul', 'ol', 'li', 'a', 'br']
             clean_body = bleach.clean(body, tags=allowed_tags, strip=True)
 
 
-            new_post = Post(title=title, body=clean_body, user_id=current_user.id)
+            new_post = Post(title=title, body=clean_body,blog_image=blog_image, user_id=current_user.id)
             db.session.add(new_post)
             db.session.commit()
             flash('Post created successfully', 'success')

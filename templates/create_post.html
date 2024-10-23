@@ -1,14 +1,20 @@
 <head><link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
 </head>
-<form method="POST" action="{{ url_for('new_post') }}" id="post-form">
+<form method="POST" action="{{ url_for('new_post') }}" id="post-form" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" name="title" class="form-control" required>
     </div>
+    <!-- blog image Upload -->
+    <div class="text-center mb-4">
+        <label for="profile_photo" class="form-label">Upload blog image:</label>
+        <input type="file" name="profile_photo" class="form-control-file">
+    </div>
     
     <div class="form-group">
         <label for="body">Body</label>
+        
         <!-- Quill editor container -->
         <div id="editor" style="height: 200px; background-color: white;" class="quill-editor"></div>
         
