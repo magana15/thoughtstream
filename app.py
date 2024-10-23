@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_caching import Cache
+import os
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -19,6 +20,12 @@ def create_app():
     app.config['CACHE_TYPE'] = 'redis'
     app.config['CACHE_REDIS_HOST'] = 'localhost'
     app.config['CACHE_REDIS_PORT'] = '6379'
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/uploads')
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+    
+
+
     
     cache = Cache(app)
     db.init_app(app)

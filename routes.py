@@ -1,8 +1,17 @@
-from flask import render_template, url_for, flash, redirect,request,session, abort
+import os
+from flask import render_template, url_for, flash, redirect,request,session, abort, send_from_directory
 from flask_login import login_user, current_user, logout_user, login_required
-from app import bcrypt, db
+from app import bcrypt, db, create_app
 from sqlalchemy.exc import IntegrityError
 from models import User,Post, Comment, Like
+from werkzeug.utils import secure_filename
+import bleach
+
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def init_routes(app, db, bcrypt, cache):
     @app.route('/')
@@ -70,6 +79,7 @@ def init_routes(app, db, bcrypt, cache):
         already authenticated or a rendered template for the 'login.html' page if the request method is
         not POST or if the login attempt is unsuccessful.
         """
+        
         from models import User
         if current_user.is_authenticated:
             # Redirect if already logged in
@@ -120,9 +130,18 @@ def init_routes(app, db, bcrypt, cache):
         if request.method == 'POST':
             title = request.form['title']
             body = request.form['body']
-            new_post = Post(title=title, body=body, user_id=current_user.id)
+            if not title or not body:
+                flash('Title and content are required.', 'error')
+                return redirect(url_for('new_post'))
+            
+            allowed_tags = ['p', 'strong', 'em', 'blockquote', 'ul', 'ol', 'li', 'a', 'br']
+            clean_body = bleach.clean(body, tags=allowed_tags, strip=True)
+
+
+            new_post = Post(title=title, body=clean_body, user_id=current_user.id)
             db.session.add(new_post)
             db.session.commit()
+            flash('Post created successfully', 'success')
             return redirect(url_for('post_detail', post_id=new_post.id))
         return render_template('create_post.html')
 
@@ -168,6 +187,8 @@ def init_routes(app, db, bcrypt, cache):
         if post.author != current_user:
             abort(403)
 
+        Comment.query.filter_by(post_id=post.id).delete()
+
         db.session.delete(post)
         db.session.commit()
         return redirect(url_for('posts'))
@@ -176,25 +197,38 @@ def init_routes(app, db, bcrypt, cache):
     @app.route('/profile')
     @login_required
     def profile():
-        return render_template('profile.html', user=current_user)
+        user=current_user
+        return render_template('profile.html', user=user)
 
     #edit profile
     @app.route('/profile/edit', methods=['GET', 'POST'])
     @login_required
     def edit_profile():
+        user= current_user
         if request.method == 'POST':
-            new_username = request.form['username']
-            new_email = request.form['email']
+            if 'profile_photo' in request.files:
+                profile_photo = request.files['profile_photo']
+                if profile_photo and allowed_file(profile_photo.filename):
+                    filename = secure_filename(profile_photo.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                
+                    # Save the profile photo to the specified folder
+                    profile_photo.save(filepath)
+                
+                    # Update the user's profile photo in the database
+                    user.profile_photo = filename
+                new_username = request.form['username']
+                new_email = request.form['email']
 
         # Update the user's information
-            current_user.username = new_username
-            current_user.email = new_email
+            user.username = new_username
+            user.email = new_email
 
             db.session.commit()
             flash('Your profile has been updated.', 'success')
             return redirect(url_for('profile'))
 
-        return render_template('edit_profile.html', user=current_user)
+        return render_template('edit_profile.html', user=user)
 
     #searching
     @app.route('/search')
@@ -250,6 +284,39 @@ def init_routes(app, db, bcrypt, cache):
             flash('You liked the post.')
 
         return redirect(url_for('post_detail', post_id=post.id))
+    
+    #file uploads
+    @app.route('/upload_profile_photo', methods=['POST'])
+    def upload_profile_photo():
+        user = current_user
+        if 'profile_photo' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+    
+        file = request.files['profile_photo']
+    
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+    
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            user.profile_photo = filename            
+            db.session.commit()
+            flash('Profile photo uploaded successfully')
+            print(current_user.profile_photo)
+
+            return redirect(url_for('profile'))
+        else:
+            flash('File type not allowed')
+            return redirect(request.url)
+    
+    @app.route('/uploads/<filename>')
+    def uploaded_file(filename):
+        user = current_user
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
     #error handlers

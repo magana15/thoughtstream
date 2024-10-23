@@ -58,9 +58,10 @@ footer {
     padding: 10px 0;
     background-color: #ce6363;
     color: white;
-    position: absolute;
+    position: relative;
     bottom: 0;
     width: 100%;
+    height: 20px;
 }
 
 .card {

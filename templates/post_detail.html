@@ -2,7 +2,9 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">{{ post.title }}</h1>
-    <p class="lead">{{ post.body }}</p> <!-- for prominent text -->
+    <div class="post-body">
+        {{ post.body | safe }}  <!-- Ensure the content is rendered as HTML -->
+    </div> <!-- for prominent text -->
 
     {% if post.author == current_user %}
     <div class="mt-4">
