@@ -141,9 +141,11 @@ def init_routes(app, db, bcrypt, cache):
     @login_required
     def new_post():
         if request.method == 'POST':
-            post = Post.post_id
+            blog_image= None
             if 'blog_image' in request.files:
                 blog_image = request.files['blog_image']
+            
+                
                 if blog_image and allowed_file(blog_image.filename):
                     filename = secure_filename(blog_image.filename)
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -152,11 +154,11 @@ def init_routes(app, db, bcrypt, cache):
                     blog_image.save(filepath)
                 
                     # Update the user's profile photo in the database
-                    post.blog_image = filename
+                    blog_image = filename
             title = request.form['title']
             body = request.form['body']
             
-            if not title or not body or not blog_image:
+            if not title or not body:
                 flash('Title, Image and content are required.', 'error')
                 return redirect(url_for('new_post'))
             
