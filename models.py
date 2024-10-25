@@ -22,7 +22,7 @@ class Post(db.Model):
     title = db.Column(db.String(150), nullable=False)
     body = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
-    blog_image = db.Column(db.String(255), nullable=True, default='default_blog_image')
+    blog_image = db.Column(db.String(255), nullable=True, default='default_blog_image.jpg')
     
     # Foreign Key to link the Post with the User
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

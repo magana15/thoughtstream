@@ -8,10 +8,11 @@
         <div class="col-md-4 mb-4"> 
             <div class="card h-100"> 
                 <!-- Blog Image -->
-                <img src="{{ url_for('static',filename='uploads/' + post.image_url) or url_for('static', filename='images/default_blog_image.jpg') }}" 
-                     alt="{{ post.title }}" 
+                <img src="{{ url_for('static',filename='uploads/' + post.blog_image) or url_for('static', filename='images/default_blog_image.jpg') }}" 
+                     alt="{{ post.blog_image }}" 
                      class="card-img-top" 
                      style="height: 200px; object-fit: cover;">  <!-- Adjust height and fit -->
+                     
 
                 <div class="card-body">
                     <!-- Blog Title -->
@@ -19,7 +20,7 @@
 
                     <!-- Author Profile Image and Date -->
                     <div class="d-flex align-items-center mb-3">
-                        <img src="{{ post.author.profile_photo or url_for('static', filename='images/default_profile.jpg') }}" 
+                        <img src="{{ url_for('static',filename='uploads/' + post.author.profile_photo) or url_for('static', filename='images/default_profile.jpg') }}" 
                              alt="{{ post.author.username }}'s Profile Photo" 
                              class="img-fluid rounded-circle" 
                              style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">

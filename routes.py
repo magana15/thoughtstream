@@ -15,13 +15,10 @@ def allowed_file(filename):
 
 def init_routes(app, db, bcrypt, cache):
     @app.route('/')
-    @cache.cached(timeout=60)
-    def hello():
-        if current_user.is_authenticated:
-            user = str(current_user.email)
-            return f'{user} is currently logged in.'
-        else:
-            return 'no user is currently here'
+    @app.route("/home")
+    def home():
+        return render_template('home.html')
+    
     
     @app.route('/register', methods = ['GET', 'POST'])
     def register():
@@ -124,9 +121,7 @@ def init_routes(app, db, bcrypt, cache):
         return redirect(url_for('home'))
 
     # Home page (requires login)
-    @app.route("/home")
-    def home():
-        return render_template('home.html')
+    
 
     @app.route('/kijana')
     def kijana():
@@ -141,11 +136,8 @@ def init_routes(app, db, bcrypt, cache):
     @login_required
     def new_post():
         if request.method == 'POST':
-            blog_image= None
             if 'blog_image' in request.files:
                 blog_image = request.files['blog_image']
-            
-                
                 if blog_image and allowed_file(blog_image.filename):
                     filename = secure_filename(blog_image.filename)
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -158,7 +150,7 @@ def init_routes(app, db, bcrypt, cache):
             title = request.form['title']
             body = request.form['body']
             
-            if not title or not body:
+            if not title or not body or not blog_image:
                 flash('Title, Image and content are required.', 'error')
                 return redirect(url_for('new_post'))
             
@@ -176,8 +168,10 @@ def init_routes(app, db, bcrypt, cache):
 #reading posts
     @app.route('/posts')
     def posts():
+        
         page = request.args.get('page', 1, type=int)
         all_posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=1)
+
         if all_posts:
             return render_template('posts.html', posts=all_posts)
         return render_template('404.html'), 404
@@ -274,6 +268,7 @@ def init_routes(app, db, bcrypt, cache):
     #about page
     @app.route('/about')
     def about():
+        post = Post.query.get(1)
         return render_template('about.html')
     
 

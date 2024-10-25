@@ -56,8 +56,8 @@ body {
 footer {
     text-align: center;
     padding: 10px 0;
-    background-color: #ce6363;
-    color: white;
+    background-color:transparent;
+    color: rgb(22, 1, 1);
     position: relative;
     bottom: 0;
     width: 100%;

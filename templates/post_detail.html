@@ -5,8 +5,8 @@
     <h1 class="mb-4">{{ post.title }}</h1>
 
     <!-- Post Image -->
-    {% if post.image_url %}
-    <img src="{{ post.image_url }}" alt="Post Image" class="img-fluid mb-4" style="max-height: 400px; object-fit: cover;">
+    {% if post.blog_image %}
+    <img src="{{ url_for('static', filename='uploads/' + post.blog_image) }}" alt="Post Image" class="img-fluid mb-4" style="max-height: 400px; object-fit: cover;">
     {% else %}
     <img src="{{ url_for('static', filename='images/default_blog_image.jpg') }}" alt="Default Image" class="img-fluid mb-4" style="max-height: 400px; object-fit: cover;">
     {% endif %}
