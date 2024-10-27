@@ -6,6 +6,8 @@
     <title>Thought Stream</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+
 </head>
 <body>
 
@@ -17,6 +19,7 @@
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="40" title="">
                 <span class="ml-2">Thought Stream</span>
             </a>
+            
 
             <!-- Search Form -->
             <form class="form-inline my-2 my-lg-0 ml-auto" action="{{ url_for('search') }}" method="GET">
@@ -36,15 +39,15 @@
 
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('new_post') }}">Write</a>
+                            <a class="nav-link" href="{{ url_for('new_post') }}"><span class="glyphicon glyphicon-pencil">&#x270f;Write</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                            <a class="nav-link" href="{{ url_for('logout') }}">logout</a>
                         </li>
                         
                         <!-- Profile Photo -->
                         <li class="nav-item">
-                            <a href="{{ url_for('profile') }}">
+                            <a href="{{ url_for('profile', user_id=current_user.id) }}">
                                 <img src="{{ url_for('static', filename='uploads/' + current_user.profile_photo) or url_for('static', filename='images/default_profile.jpg') }}" 
              alt="{{ current_user.username }}'s Profile Photo" 
              class="img-fluid rounded-circle mb-3" 

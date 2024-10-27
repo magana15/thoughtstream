@@ -170,7 +170,7 @@ def init_routes(app, db, bcrypt, cache):
     def posts():
         
         page = request.args.get('page', 1, type=int)
-        all_posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=1)
+        all_posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
 
         if all_posts:
             return render_template('posts.html', posts=all_posts)
@@ -216,10 +216,13 @@ def init_routes(app, db, bcrypt, cache):
         return redirect(url_for('posts'))
     
     #adding user profile
+    
+
+    @app.route('/profile/<int:user_id>')
     @app.route('/profile')
     @login_required
-    def profile():
-        user=current_user
+    def profile(user_id):
+        user= User.query.get_or_404(user_id)
         return render_template('profile.html', user=user)
 
     #edit profile
