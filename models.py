@@ -2,7 +2,10 @@ from app import login_manager, db
 from flask_login import UserMixin
 from datetime import datetime,timezone
 
-
+favorites = db.Table('favorites',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True)
+)    
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -10,13 +13,14 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150), nullable=False)
     profile_photo = db.Column(db.String(255), nullable=True, default='default_profile.jpg')
     
-
+    favorites = db.relationship('Post', secondary=favorites, backref=db.backref('favorited_by', lazy='dynamic'))
     def __repr__(self):
         return f'<User: {self.username}>'
     
     def get_id(self):
         return self.id
-    
+
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)

@@ -193,6 +193,7 @@ def init_routes(app, db, bcrypt, cache):
 
         if request.method == 'POST':
             post.title = request.form['title']
+            
             post.body = request.form['body']
             db.session.commit()
             return redirect(url_for('post_detail', post_id=post.id))
@@ -343,6 +344,39 @@ def init_routes(app, db, bcrypt, cache):
     def uploaded_file(filename):
         user = current_user
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+    @app.route('/favorite/<int:post_id>', methods=['POST'])
+    @login_required
+    def favorite_post(post_id):
+        post = Post.query.get_or_404(post_id)
+        if post not in current_user.favorites:
+            current_user.favorites.append(post)
+            db.session.commit()
+            flash('Post added to favorites!')
+        else:
+            flash('Post is already in your favorites.')
+        return redirect(url_for('posts'))
+
+    @app.route('/unfavorite/<int:post_id>', methods=['POST'])
+    @login_required
+    def unfavorite_post(post_id):   
+        post = Post.query.get_or_404(post_id)
+        if post in current_user.favorites:
+            current_user.favorites.remove(post)
+            db.session.commit()
+            flash('Post removed from favorites.')
+        else:
+            flash('Post is not in your favorites.')
+        return redirect(url_for('posts'))
+
+
+    @app.route('/favorites')
+    @login_required
+    def favorites():
+        favorite_posts = current_user.favorites  # Retrieve user's favorite posts
+        return render_template('favorites.html', posts=favorite_posts)
+
+
 
 
     #error handlers

@@ -1,9 +1,89 @@
-<form method="POST" action="/post/{{ post.id }}/edit">
-    <label for="title">Title</label>
-    <input type="text" name="title" id="title" value="{{ post.title }}" required>
-    
-    <label for="body">Body</label>
-    <textarea name="body" id="body" required>{{ post.body }}</textarea>
-    
-    <button type="submit">Update Post</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Post</title>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+
+  <style>
+    /* Styling for the form container */
+    .form-container {
+      max-width: 700px;
+      margin: 50px auto;
+      padding: 30px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+    }
+    /* Styling for the Quill editor */
+    #editor {
+      height: 250px;
+      background-color: white;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 8px;
+      overflow-y: auto; /* Enable scrolling */
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2 class="text-center mb-4">Edit Your Post</h2>
+    <form method="POST" action="/post/{{ post.id }}/edit" id="post-form" enctype="multipart/form-data">
+      <!-- Title field -->
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" class="form-control" required placeholder="Enter your post title" value="{{ post.title }}">
+      </div>
+
+      <!-- Blog Image Upload -->
+      <div class="form-group">
+        <label for="blog_image" class="form-label">Upload Blog Image:</label>
+        <input type="file" name="blog_image" class="form-control-file" value = "post.blog_image">
+      </div>
+
+      <!-- Quill editor for body content -->
+      <div class="form-group">
+        <label for="body">Edit your blog</label>
+        <div id="editor" class="quill-editor"></div>
+        <!-- Hidden textarea for submission -->
+        <textarea id="post-content" name="body" hidden required></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Update Post</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  <script>
+    // Initialize Quill editor with toolbar
+    var quill = new Quill('#editor', {
+      theme: 'snow',
+      placeholder: 'Write your blog post here...',
+      modules: {
+        toolbar: [
+          [{ 'header': [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          ['link', 'blockquote', 'code-block'],
+          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+          [{ 'align': [] }],
+          [{ 'color': [] }, { 'background': [] }]
+        ]
+      }
+    });
+
+    // Load existing post content into the editor if editing an existing post
+    const existingContent = {{ post.body|tojson|safe }};
+    quill.clipboard.dangerouslyPasteHTML(existingContent);
+
+    // Sync editor content to hidden textarea on form submit
+    document.getElementById('post-form').onsubmit = function() {
+      document.querySelector('#post-content').value = quill.root.innerHTML;
+    };
+  </script>
+</body>
+</html>

@@ -37,6 +37,16 @@
                     <a class="btn btn-primary mt-3" href="{{ url_for('post_detail', post_id=post.id) }}">Read more</a>
                 </div>
 
+                {% if post in current_user.favorites %}
+    <form action="{{ url_for('unfavorite_post', post_id=post.id) }}" method="post">
+        <button type="submit" class="btn btn-secondary">Remove from Favorites</button>
+    </form>
+{% else %}
+    <form action="{{ url_for('favorite_post', post_id=post.id) }}" method="post">
+        <button type="submit" class="btn btn-primary">Add to Favorites</button>
+    </form>
+{% endif %}
+
                 <!-- Edit and Deleting Post -->
                 {% if post.author == current_user %}
                 <div class="card-footer d-flex justify-content-between">
