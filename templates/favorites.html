@@ -4,14 +4,15 @@
 <h2>Your Favorites</h2>
 <div class="row">
     {% for post in posts %}
-    <div class="col-md-4 mb-4"> 
-        <div class="card h-100"> 
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
             <!-- Blog Image -->
-            <img src="{{ url_for('static',filename='uploads/' + post.blog_image) or url_for('static', filename='images/default_blog_image.jpg') }}" 
-                 alt="{{ post.blog_image }}" 
-                 class="card-img-top" 
-                 style="height: 200px; object-fit: cover;">  <!-- Adjust height and fit -->
-                 
+            <img
+                src="{{ url_for('static',filename='uploads/' + post.blog_image) or url_for('static', filename='images/default_blog_image.jpg') }}"
+                alt="{{ post.blog_image }}"
+                class="card-img-top"
+                style="height: 200px; object-fit: cover;">
+            <!-- Adjust height and fit -->
 
             <div class="card-body">
                 <!-- Blog Title -->
@@ -20,23 +21,31 @@
                 <!-- Author Profile Image and Date -->
                 <div class="d-flex align-items-center mb-3">
                     <a href="{{ url_for('profile', user_id=post.author.id) }}">
-                        <img src="{{ url_for('static',filename='uploads/' + post.author.profile_photo) or url_for('static', filename='images/default_profile.jpg') }}" 
-                         alt="{{ post.author.username }}'s Profile Photo" 
-                         class="img-fluid rounded-circle" 
-                         style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;"></a>
-                    <p class="date-author mb-0">{{ post.date_posted.strftime('%B %d, %Y') }} | {{ post.author.username }}</p>
+                        <img
+                            src="{{ url_for('static',filename='uploads/' + post.author.profile_photo) or url_for('static', filename='images/default_profile.jpg') }}"
+                            alt="{{ post.author.username }}'s Profile Photo"
+                            class="img-fluid rounded-circle"
+                            style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;"></a>
+                    <p class="date-author mb-0">{{
+                        post.date_posted.strftime('%B %d, %Y') }} | {{
+                        post.author.username }}</p>
                 </div>
 
                 <!-- Blog Snippet (First 100 Characters) -->
                 <div class="post-body">
-                    {{ post.body[:100] | safe }}...  <!-- Ensure content is rendered as HTML -->
+                    {{ post.body[:100] | safe }}...
+                    <!-- Ensure content is rendered as HTML -->
                 </div>
 
                 <!-- Read More Button -->
-                <a class="btn btn-primary mt-3" href="{{ url_for('post_detail', post_id=post.id) }}">Read more</a>
+                <a class="btn btn-primary mt-3"
+                    href="{{ url_for('post_detail', post_id=post.id) }}">Read
+                    more</a>
             </div>
-            <form action="{{ url_for('unfavorite_post', post_id=post.id) }}" method="post">
-                <button type="submit" class="btn btn-danger">Remove from Favorites</button>
+            <form action="{{ url_for('unfavorite_post', post_id=post.id) }}"
+                method="post">
+                <button type="submit" class="btn btn-danger">Remove from
+                    Favorites</button>
             </form>
         </div>
     </div>

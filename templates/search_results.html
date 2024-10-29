@@ -3,31 +3,34 @@
 {% block title %}Blog Page{% endblock %}
 
 {% block content %}
-  <div class="container mt-4">
-    {%if posts%}
-    <h1 class="mb-4">search results for "{{query}}"</h1>
-    {%else%}
-    <h1 class="mb-4">No search results for "{{query}}"</h1>
-    {%endif%}
-    <!-- Loop through the posts dynamically -->
-    
-    {% for post in posts %}
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
-        
-        <div class="d-flex align-items-center mb-3">
-          <a href="{{ url_for('profile', user_id=post.author.id) }}">
-              <img src="{{ url_for('static',filename='uploads/' + post.author.profile_photo) or url_for('static', filename='images/default_profile.jpg') }}" 
-               alt="{{ post.author.username }}'s Profile Photo" 
-               class="img-fluid rounded-circle" 
-               style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;"></a>
-          <p class="date-author mb-0">{{ post.date_posted.strftime('%B %d, %Y') }} | {{ post.author.username }}</p>
-      </div> 
-        <p class="card-text">{{ post.body[:150] | safe}}...</p> 
-        <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-primary">Read More</a>
+<div class="container mt-4">
+  {%if posts%}
+  <h1 class="mb-4">search results for "{{query}}"</h1>
+  {%else%}
+  <h1 class="mb-4">No search results for "{{query}}"</h1>
+  {%endif%}
+  <!-- Loop through the posts dynamically -->
+
+  {% for post in posts %}
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{ post.title }}</h5>
+
+      <div class="d-flex align-items-center mb-3">
+        <a href="{{ url_for('profile', user_id=post.author.id) }}">
+          <img
+            src="{{ url_for('static',filename='uploads/' + post.author.profile_photo) or url_for('static', filename='images/default_profile.jpg') }}"
+            alt="{{ post.author.username }}'s Profile Photo"
+            class="img-fluid rounded-circle"
+            style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;"></a>
+        <p class="date-author mb-0">{{ post.date_posted.strftime('%B %d, %Y') }}
+          | {{ post.author.username }}</p>
       </div>
+      <p class="card-text">{{ post.body[:150] | safe}}...</p>
+      <a href="{{ url_for('post_detail', post_id=post.id) }}"
+        class="btn btn-primary">Read More</a>
     </div>
-    {% endfor %}
   </div>
+  {% endfor %}
+</div>
 {% endblock %}

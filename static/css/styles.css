@@ -135,3 +135,23 @@ footer {
     padding: 10px;
   }
 
+/* Styling for the form container */
+.form-container {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
+  /* Styling for the Quill editor */
+  #editor {
+    height: 250px;
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px;
+    overflow-y: auto; /* Enable scrolling */
+  }
+

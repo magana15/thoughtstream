@@ -2,17 +2,18 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">Blog Posts</h1>
-    
+
     <div class="row">
         {% for post in posts %}
-        <div class="col-md-4 mb-4"> 
-            <div class="card h-100"> 
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
                 <!-- Blog Image -->
-                <img src="{{ url_for('static',filename='uploads/' + post.blog_image) or url_for('static', filename='images/default_blog_image.jpg') }}" 
-                     alt="{{ post.blog_image }}" 
-                     class="card-img-top" 
-                     style="height: 200px; object-fit: cover;">  <!-- Adjust height and fit -->
-                     
+                <img
+                    src="{{ url_for('static',filename='uploads/' + post.blog_image) or url_for('static', filename='images/default_blog_image.jpg') }}"
+                    alt="{{ post.blog_image }}"
+                    class="card-img-top"
+                    style="height: 200px; object-fit: cover;">
+                <!-- Adjust height and fit -->
 
                 <div class="card-body">
                     <!-- Blog Title -->
@@ -20,40 +21,53 @@
 
                     <!-- Author Profile Image and Date -->
                     <div class="d-flex align-items-center mb-3">
-                        <a href="{{ url_for('profile', user_id=post.author.id) }}">
-                            <img src="{{ url_for('static',filename='uploads/' + post.author.profile_photo) or url_for('static', filename='images/default_profile.jpg') }}" 
-                             alt="{{ post.author.username }}'s Profile Photo" 
-                             class="img-fluid rounded-circle" 
-                             style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;"></a>
-                        <p class="date-author mb-0">{{ post.date_posted.strftime('%B %d, %Y') }} | {{ post.author.username }}</p>
+                        <a
+                            href="{{ url_for('profile', user_id=post.author.id) }}">
+                            <img
+                                src="{{ url_for('static',filename='uploads/' + post.author.profile_photo) or url_for('static', filename='images/default_profile.jpg') }}"
+                                alt="{{ post.author.username }}'s Profile Photo"
+                                class="img-fluid rounded-circle"
+                                style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;"></a>
+                        <p class="date-author mb-0">{{
+                            post.date_posted.strftime('%B %d, %Y') }} | {{
+                            post.author.username }}</p>
                     </div>
 
                     <!-- Blog Snippet (First 100 Characters) -->
                     <div class="post-body">
-                        {{ post.body[:100] | safe }}...  <!-- Ensure content is rendered as HTML -->
+                        {{ post.body[:100] | safe }}...
+                        <!-- Ensure content is rendered as HTML -->
                     </div>
 
                     <!-- Read More Button -->
-                    <a class="btn btn-primary mt-3" href="{{ url_for('post_detail', post_id=post.id) }}">Read more</a>
+                    <a class="btn btn-primary mt-3"
+                        href="{{ url_for('post_detail', post_id=post.id) }}">Read
+                        more</a>
                 </div>
 
                 {% if post in current_user.favorites %}
-    <form action="{{ url_for('unfavorite_post', post_id=post.id) }}" method="post">
-        <button type="submit" class="btn btn-secondary">Remove from Favorites</button>
-    </form>
-{% else %}
-    <form action="{{ url_for('favorite_post', post_id=post.id) }}" method="post">
-        <button type="submit" class="btn btn-primary">Add to Favorites</button>
-    </form>
-{% endif %}
+                <form action="{{ url_for('unfavorite_post', post_id=post.id) }}"
+                    method="post">
+                    <button type="submit" class="btn btn-secondary">Remove from
+                        Favorites</button>
+                </form>
+                {% else %}
+                <form action="{{ url_for('favorite_post', post_id=post.id) }}"
+                    method="post">
+                    <button type="submit" class="btn btn-primary">Add to
+                        Favorites</button>
+                </form>
+                {% endif %}
 
                 <!-- Edit and Deleting Post -->
                 {% if post.author == current_user %}
                 <div class="card-footer d-flex justify-content-between">
                     <form method="POST" action="/post/{{ post.id }}/delete">
-                        <button class="btn btn-danger" type="submit">Delete Post</button>
+                        <button class="btn btn-danger" type="submit">Delete
+                            Post</button>
                     </form>
-                    <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-secondary">Edit Post</a>
+                    <a href="{{ url_for('edit_post', post_id=post.id) }}"
+                        class="btn btn-secondary">Edit Post</a>
                 </div>
                 {% endif %}
             </div>
@@ -67,26 +81,31 @@
     <ul class="pagination">
         {% if posts.has_prev %}
         <li class="page-item">
-            <a class="page-link" href="{{ url_for('posts', page=posts.prev_num) }}" aria-label="Previous">
+            <a class="page-link"
+                href="{{ url_for('posts', page=posts.prev_num) }}"
+                aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
             </a>
         </li>
         {% endif %}
-      
+
         {% for page_num in posts.iter_pages() %}
         {% if page_num %}
         <li class="page-item {% if page_num == posts.page %}active{% endif %}">
-            <a class="page-link" href="{{ url_for('posts', page=page_num) }}">{{ page_num }}</a>
+            <a class="page-link" href="{{ url_for('posts', page=page_num) }}">{{
+                page_num }}</a>
         </li>
         {% else %}
         <li class="page-item"><span class="page-link">...</span></li>
         {% endif %}
         {% endfor %}
-      
+
         {% if posts.has_next %}
         <li class="page-item">
-            <a class="page-link" href="{{ url_for('posts', page=posts.next_num) }}" aria-label="Next">
+            <a class="page-link"
+                href="{{ url_for('posts', page=posts.next_num) }}"
+                aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>

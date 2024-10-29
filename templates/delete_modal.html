@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -104,27 +104,29 @@ hr {
   }
 }
     </style>
-</head>
-<body>
-    
+  </head>
+  <body>
 
-<button onclick="document.getElementById('id01').style.display='block'">Open Modal</button>
+    <button onclick="document.getElementById('id01').style.display='block'">Open
+      Modal</button>
 
-<div id="id01" class="modal">
-  <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-  <form class="modal-content" action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
-    <div class="container">
-      <h1>Delete Account</h1>
-      <p>Are you sure you want to delete your account?</p>
+    <div id="id01" class="modal">
+      <span onclick="document.getElementById('id01').style.display='none'"
+        class="close" title="Close Modal">&times;</span>
+      <form class="modal-content"
+        action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+        <div class="container">
+          <h1>Delete Account</h1>
+          <p>Are you sure you want to delete your account?</p>
 
-      <div class="clearfix">
-        <button type="button" class="cancelbtn">Cancel</button>
-        <button type="button" class="deletebtn">Delete</button>
-      </div>
+          <div class="clearfix">
+            <button type="button" class="cancelbtn">Cancel</button>
+            <button type="button" class="deletebtn">Delete</button>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
-<script>
+    <script>
     // Get the modal
     var modal = document.getElementById('id01');
     
@@ -135,5 +137,5 @@ hr {
       }
     }
     </script>
-</body>
+  </body>
 </html>

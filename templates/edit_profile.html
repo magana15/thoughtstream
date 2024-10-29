@@ -1,27 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST" action="{{ url_for('edit_profile') }}" enctype="multipart/form-data" class="shadow-sm p-4 border rounded">
+<form method="POST" action="{{ url_for('edit_profile') }}"
+    enctype="multipart/form-data" class="shadow-sm p-4 border rounded">
     <!-- Profile Photo Upload -->
     <div class="text-center mb-4">
-        <img src="{{ user.profile_photo or url_for('static', filename='images/default_profile.jpg') }}" 
-             alt="{{ user.username }}'s Profile Photo" 
-             class="img-fluid rounded-circle mb-3" 
-             style="width: 120px; height: 120px; object-fit: cover;">
-        <label for="profile_photo" class="form-label">Update Profile Photo:</label>
+        <img
+            src="{{ current_user.profile_photo or url_for('static', filename='images/default_profile.jpg') }}"
+            alt="{{ user.username }}'s Profile Photo"
+            class="img-fluid rounded-circle mb-3"
+            style="width: 120px; height: 120px; object-fit: cover;">
+        <label for="profile_photo" class="form-label">Update Profile
+            Photo:</label>
         <input type="file" name="profile_photo" class="form-control-file">
     </div>
 
     <!-- Username -->
     <div class="mb-3">
         <label for="username" class="form-label">Username:</label>
-        <input type="text" name="username" value="{{ user.username }}" class="form-control" required>
+        <input type="text" name="username" value="{{ user.username }}"
+            class="form-control" required>
     </div>
 
     <!-- Email -->
     <div class="mb-3">
         <label for="email" class="form-label">Email:</label>
-        <input type="email" name="email" value="{{ user.email }}" class="form-control" required>
+        <input type="email" name="email" value="{{ user.email }}"
+            class="form-control" required>
     </div>
 
     <!-- Submit Button -->
